@@ -78,6 +78,8 @@ Mockups will be created using **PowerPoint or Figma** and linked here once final
  
 ## 4. Class Diagram
  
+## 4. Class Diagram
+
 ```mermaid
 classDiagram
     class User {
@@ -86,7 +88,7 @@ classDiagram
         String email
         List<Event> rsvpedEvents
     }
- 
+
     class Event {
         String id
         String title
@@ -95,16 +97,16 @@ classDiagram
         String location
         List<User> attendees
     }
- 
+
     class Organizer {
         String id
         String name
         List<Event> createdEvents
     }
- 
+
     User --> Event : RSVPs
     Organizer --> Event : Creates
-
+```
 ## 5. Class Diagram Description
 User: Represents a student who browses events and RSVPs.
 Event: Represents a campus event with details such as date, location, and attendees
