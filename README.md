@@ -29,50 +29,50 @@ Mockups will be created using **PowerPoint or Figma** and linked here once final
 ## 3. Functional Requirements
  
 ### Requirement 1 – Browse Events
-As a student  
-I want to browse upcoming campus events  
-So that I can decide which ones to attend  
+- As a student  
+- I want to browse upcoming campus events  
+- So that I can decide which ones to attend  
  
 **Scenarios**
 - Given I am logged in  
-  When I open the event feed  
-  Then I see a list of upcoming events with key details  
+- When I open the event feed  
+- Then I see a list of upcoming events with key details  
  
 - Given there are no upcoming events  
-  When I open the event feed  
-  Then I see a message stating “No upcoming events available.”
+- When I open the event feed  
+- Then I see a message stating “No upcoming events available.”
  
 ---
  
 ### Requirement 2 – RSVP to Events
 - As a student
-  I want to RSVP to events
-  So that I can receive reminders and updates  
+- I want to RSVP to events
+- So that I can receive reminders and updates  
  
 **Scenarios**
 - Given I am viewing an event  
-  When I click the RSVP button  
-  Then the event is added to my upcoming events and reminders are enabled  
+- When I click the RSVP button  
+- Then the event is added to my upcoming events and reminders are enabled  
  
 - Given I am not logged in  
-  When I attempt to RSVP  
-  Then I am prompted to log in before proceeding
+- When I attempt to RSVP  
+- Then I am prompted to log in before proceeding
  
 ---
  
 ### Requirement 3 – Create Events
-As an event organizer  
-I want to create and publish events  
-So that students can discover and attend them  
+- As an event organizer  
+- I want to create and publish events  
+- So that students can discover and attend them  
  
 **Scenarios**
 - Given I am logged in as an organizer  
-  When I submit a completed event creation form  
-  Then the event appears in the public event feed  
+- When I submit a completed event creation form  
+- Then the event appears in the public event feed  
  
 - Given required fields are missing  
-  When I submit the event creation form  
-  Then validation errors are displayed and the event is not published
+- When I submit the event creation form  
+- Then validation errors are displayed and the event is not published
  
 ---
  
