@@ -148,6 +148,6 @@ Milestone #2: Notifications and reminders
 Milestone #3: Calendar integration and UI polish
  
 ## 9. Weekly Meeting
-Time: TBD
+Time: Thursady 10AM-10:30AM
 Platform: Microsoft Teams
 Meeting Link: Emailed to instructor and team members
