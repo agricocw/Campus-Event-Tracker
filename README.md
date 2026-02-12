@@ -150,4 +150,6 @@ Milestones
 ## 9. Weekly Meeting
 - Time: Thursday from 10AM-10:30AM
 - Platform: Microsoft Teams
-- Meeting Link: Emailed to instructor and team members
+- Meeting Link: https://teams.microsoft.com/l/meetup-join/19%3ameeting_OTBmNmExODQtNzUwYy00NjAwLTkzNTAtYWM3ZjhmZmExZDU0%40thread.v2/0?context=%7b%22Tid%22%3a%22f5222e6c-5fc6-48eb-8f03-73db18203b63%22%2c%22Oid%22%3a%222f22b49c-75a0-4097-ad2b-ab7f9fc73f61%22%7d
+- Emailed to instructor and team members
+
