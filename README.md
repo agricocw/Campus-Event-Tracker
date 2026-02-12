@@ -139,7 +139,7 @@ Frontend Developer: Rudi Vogel
 Backend Developer: Riddhi Mahajan
  
 ## 8. GitHub Project and Milestones
-GitHub Repository: [Add repository link}
+GitHub Repository: https://github.com/agricocw/Campus-Event-Tracker/tree/main
 GitHub Project Board: [Add project board link]
  
 Milestones
