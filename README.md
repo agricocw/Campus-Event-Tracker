@@ -2,9 +2,9 @@
  
 ## 1. Introduction
  
-The **Campus Event Tracker** is a mobile and web application designed to help students discover, RSVP to, and receive reminders for campus events. It centralizes event information from various departments and student organizations, making it easier for students to stay engaged with campus life.
+- The Campus Event Tracker is a mobile and web application designed to help students discover, RSVP to, and receive reminders for campus events. It centralizes event information from various departments and student organizations, making it easier for students to stay engaged with campus life.
  
-Students often miss events due to scattered announcements or lack of reminders. This application improves campus engagement and communication by providing a single, organized platform for event discovery and participation.
+- Students often miss events due to scattered announcements or lack of reminders. This application improves campus engagement and communication by providing a single, organized platform for event discovery and participation.
  
 **Target Users**
 - Students
@@ -106,9 +106,9 @@ classDiagram
     Organizer --> Event : Creates
 ```
 ## 5. Class Diagram Description
-User: Represents a student who browses events and RSVPs.
-Event: Represents a campus event with details such as date, location, and attendees
-Organizer: Represents a user with permission to create and manage events.
+- User: Represents a student who browses events and RSVPs.
+- Event: Represents a campus event with details such as date, location, and attendees
+- Organizer: Represents a user with permission to create and manage events.
  
 ## 6. JSON Schema
  
@@ -132,22 +132,22 @@ Organizer: Represents a user with permission to create and manage events.
 
 ## 7. Scrum Roles
  
-Product Owner: Christopher Agricola
-Scrum Master: Riddhi Mahajan
-DevOps: Shamak Patel
-Frontend Developer: Rudi Vogel 
-Backend Developer: Riddhi Mahajan
+- Product Owner: Christopher Agricola
+- Scrum Master: Riddhi Mahajan
+- DevOps: Shamak Patel
+- Frontend Developer: Rudi Vogel 
+- Backend Developer: Riddhi Mahajan
  
 ## 8. GitHub Project and Milestones
 - GitHub Repository: https://github.com/agricocw/Campus-Event-Tracker/tree/main
 - GitHub Project Board: https://github.com/users/Shamak10/projects/5/views
  
 Milestones
-Milestone #1: User login, event feed, RSVP functionality
-Milestone #2: Notifications and reminders
-Milestone #3: Calendar integration and UI polish
+- Milestone #1: User login, event feed, RSVP functionality
+- Milestone #2: Notifications and reminders
+- Milestone #3: Calendar integration and UI polish
  
 ## 9. Weekly Meeting
-Time: TBD
-Platform: Microsoft Teams
-Meeting Link: Emailed to instructor and team members
+- Time: TBD
+- Platform: Microsoft Teams
+- Meeting Link: Emailed to instructor and team members
