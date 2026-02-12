@@ -132,11 +132,11 @@ Organizer: Represents a user with permission to create and manage events.
 
 ## 7. Scrum Roles
  
-Product Owner: TBD
-Scrum Master: TBD
-DevOps: TBD
-Frontend Developer: TBD
-Backend Developer: TBD
+Product Owner: Christopher Agricola
+Scrum Master: Riddhi Mahajan
+DevOps: Shamak Patel
+Frontend Developer: Rudi Vogel 
+Backend Developer: Riddhi Mahajan
  
 ## 8. GitHub Project and Milestones
 GitHub Repository: [Add repository link}
