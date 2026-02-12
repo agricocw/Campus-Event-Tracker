@@ -139,8 +139,8 @@ Frontend Developer: Rudi Vogel
 Backend Developer: Riddhi Mahajan
  
 ## 8. GitHub Project and Milestones
-GitHub Repository: https://github.com/agricocw/Campus-Event-Tracker/tree/main
-GitHub Project Board: https://github.com/users/Shamak10/projects/5/views
+- GitHub Repository: https://github.com/agricocw/Campus-Event-Tracker/tree/main
+- GitHub Project Board: https://github.com/users/Shamak10/projects/5/views
  
 Milestones
 Milestone #1: User login, event feed, RSVP functionality
