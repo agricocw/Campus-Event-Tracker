@@ -148,6 +148,6 @@ Milestones
 - Milestone #3: Calendar integration and UI polish
  
 ## 9. Weekly Meeting
-- Time: TBD
+- Time: Thursday from 10AM-10:30AM
 - Platform: Microsoft Teams
 - Meeting Link: Emailed to instructor and team members
