@@ -77,8 +77,6 @@ Mockups will be created using **PowerPoint or Figma** and linked here once final
 ---
  
 ## 4. Class Diagram
- 
-## 4. Class Diagram
 
 ```mermaid
 classDiagram
