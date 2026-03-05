@@ -1,0 +1,47 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.event-card {
+    transition: transform 0.2s;
+}
+
+.event-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 1rem 1rem;
+}
+
+.btn-rsvp {
+    background-color: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
+.btn-rsvp:hover {
+    background-color: #5a6fd6;
+    border-color: #5a6fd6;
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.auth-container {
+    max-width: 450px;
+    margin: 3rem auto;
+}

@@ -1,0 +1,13 @@
+com/campustracker/service/UserService.class
+com/campustracker/repository/UserRepository.class
+com/campustracker/config/DataLoader.class
+com/campustracker/controller/EventController.class
+com/campustracker/repository/EventRepository.class
+com/campustracker/model/Event.class
+com/campustracker/service/CustomUserDetailsService.class
+com/campustracker/config/SecurityConfig.class
+com/campustracker/controller/AuthController.class
+com/campustracker/model/User.class
+com/campustracker/model/Role.class
+com/campustracker/service/EventService.class
+com/campustracker/CampusEventTrackerApplication.class

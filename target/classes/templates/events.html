@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events – Campus Event Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/events}">Campus Event Tracker</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/events}">Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/my-events}">My Events</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ORGANIZER')">
+                    <a class="nav-link" th:href="@{/events/new}">Create Event</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <span class="nav-link text-light" sec:authentication="name"></span>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero-section">
+    <div class="container text-center">
+        <h1>Upcoming Campus Events</h1>
+        <p>Discover what's happening on campus and RSVP to events you love.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <!-- Empty state -->
+    <div th:if="${#lists.isEmpty(events)}" class="empty-state">
+        <h4>No upcoming events available.</h4>
+        <p>Check back later or create an event if you're an organizer!</p>
+    </div>
+
+    <!-- Event cards -->
+    <div class="row" th:unless="${#lists.isEmpty(events)}">
+        <div class="col-md-4 mb-4" th:each="event : ${events}">
+            <div class="card event-card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${event.title}">Event Title</h5>
+                    <p class="card-text text-muted">
+                        <small>
+                            <span th:text="${#temporals.format(event.date, 'MMM dd, yyyy h:mm a')}"></span><br>
+                            <span th:text="${event.location}"></span>
+                        </small>
+                    </p>
+                    <p class="card-text" th:text="${#strings.abbreviate(event.description, 100)}">Description...</p>
+                </div>
+                <div class="card-footer bg-white">
+                    <a th:href="@{/events/{id}(id=${event.id})}" class="btn btn-rsvp btn-sm">View Details</a>
+                    <span class="badge bg-secondary float-end mt-1"
+                          th:text="${event.attendees.size()} + ' attending'"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
