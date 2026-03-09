@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${event.title} + ' — Campus Event Tracker'">Event Detail</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
+            <div class="nav-links">
+                <a th:href="@{/events}" class="nav-link">Events</a>
+                <span sec:authorize="hasRole('ORGANIZER')">
+                    <a th:href="@{/events/create}" class="nav-link btn-create">+ Create Event</a>
+                </span>
+                <span sec:authorize="isAnonymous()">
+                    <a th:href="@{/auth/login}" class="nav-link">Login</a>
+                    <a th:href="@{/auth/register}" class="nav-link btn-register">Register</a>
+                </span>
+                <span sec:authorize="isAuthenticated()" class="nav-user">
+                    <a th:href="@{/user/my-events}" class="nav-link">My Events</a>
+                    <span class="nav-username" sec:authentication="name"></span>
+                    <form th:action="@{/auth/logout}" method="post" class="inline-form">
+                        <button type="submit" class="btn-logout">Logout</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- #9 — Flash messages with close button -->
+        <div th:if="${success}" class="alert alert-success">
+            <span th:text="${success}"></span>
+            <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        <div th:if="${error}" class="alert alert-error">
+            <span th:text="${error}"></span>
+            <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+
+        <a th:href="@{/events}" class="back-link">← Back to Events</a>
+
+        <div class="event-detail">
+            <div class="event-detail-header">
+                <span class="event-status" th:text="${event.status}"
+                    th:classappend="${event.status.name() == 'PUBLISHED'} ? 'status-published' : (${event.status.name() == 'DRAFT'} ? 'status-draft' : 'status-cancelled')">
+                </span>
+                <span class="event-category" th:text="${event.category}">Category</span>
+            </div>
+
+            <h1 th:text="${event.title}">Event Title</h1>
+
+            <div class="event-detail-meta">
+                <div class="meta-item">
+                    <strong>📅 Date &amp; Time</strong>
+                    <p>
+                        <span th:text="${#temporals.format(event.startTime, 'EEEE, MMM dd, yyyy')}">Date</span><br />
+                        <span th:text="${#temporals.format(event.startTime, 'h:mm a')}">Start</span>
+                        — <span th:text="${#temporals.format(event.endTime, 'h:mm a')}">End</span>
+                    </p>
+                </div>
+                <div class="meta-item">
+                    <strong>📍 Location</strong>
+                    <p th:text="${event.location}">Location</p>
+                </div>
+                <div class="meta-item">
+                    <strong>👥 Attendees</strong>
+                    <p>
+                        <span th:text="${event.attendeeCount}">0</span> attending
+                        <span th:if="${event.capacity != null}">
+                            / <span th:text="${event.capacity}">∞</span> capacity
+                        </span>
+                    </p>
+                </div>
+                <div class="meta-item">
+                    <strong>🎯 Organized by</strong>
+                    <p th:text="${event.organizer.firstName + ' ' + event.organizer.lastName}">Organizer</p>
+                </div>
+            </div>
+
+            <div class="event-description" th:if="${event.description != null}">
+                <h3>About this event</h3>
+                <p th:text="${event.description}">Description</p>
+            </div>
+
+            <div class="event-tags" th:if="${!event.tags.isEmpty()}">
+                <span th:each="tag : ${event.tags}" class="tag" th:text="${tag}">tag</span>
+            </div>
+
+            <!-- RSVP section — only for authenticated users with PUBLISHED events -->
+            <div class="event-actions" sec:authorize="isAuthenticated()" th:if="${event.status.name() == 'PUBLISHED'}">
+                <div th:if="${!hasRsvp}">
+                    <form th:action="@{/events/{id}/rsvp(id=${event.id})}" method="post">
+                        <button type="submit" class="btn btn-primary btn-lg"
+                            th:text="${event.full} ? 'Join Waitlist' : 'RSVP Now'">
+                            RSVP Now
+                        </button>
+                    </form>
+                </div>
+                <!-- #3 — Cancel RSVP button -->
+                <div th:if="${hasRsvp}" class="rsvp-confirmed">
+                    <p>✅ You've RSVPed to this event!</p>
+                    <form th:action="@{/events/{id}/cancel-rsvp(id=${event.id})}" method="post" class="cancel-form">
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to cancel your RSVP?')">
+                            Cancel RSVP
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- #5 — Edit button for organizer on their events -->
+            <div class="event-actions" sec:authorize="hasRole('ORGANIZER')">
+                <a th:href="@{/events/{id}/edit(id=${event.id})}" class="btn btn-outline">✏️ Edit Event</a>
+            </div>
+
+            <!-- Publish button for organizer on DRAFT events -->
+            <div class="event-actions" sec:authorize="hasRole('ORGANIZER')" th:if="${event.status.name() == 'DRAFT'}">
+                <form th:action="@{/events/{id}/publish(id=${event.id})}" method="post">
+                    <button type="submit" class="btn btn-success btn-lg"
+                        onclick="return confirm('Publish this event? It will be visible to students.')">
+                        Publish Event
+                    </button>
+                </form>
+            </div>
+
+            <!-- Prompt to login for anonymous users -->
+            <div class="event-actions" sec:authorize="isAnonymous()" th:if="${event.status.name() == 'PUBLISHED'}">
+                <p><a th:href="@{/auth/login}" class="btn btn-primary btn-lg">Login to RSVP</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Campus Event Tracker — University of Cincinnati</p>
+    </footer>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+
+</html>

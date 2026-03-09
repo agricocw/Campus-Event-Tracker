@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Not Found — Campus Event Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+</head>
+
+<body>
+    <div class="error-container">
+        <div class="error-card">
+            <h1 class="error-code">404</h1>
+            <h2>Page Not Found</h2>
+            <p th:text="${message} ?: 'The page you\'re looking for doesn\'t exist.'">
+                Not found message
+            </p>
+            <a th:href="@{/events}" class="btn btn-primary">← Back to Events</a>
+        </div>
+    </div>
+</body>
+
+</html>

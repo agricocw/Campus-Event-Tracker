@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — Campus Event Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>🎓 Campus Event Tracker</h1>
+            <h2>Create Account</h2>
+
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+            <form th:action="@{/auth/register}" th:object="${form}" method="post" class="auth-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" th:field="*{firstName}" placeholder="John" required />
+                        <span class="field-error" th:if="${#fields.hasErrors('firstName')}"
+                            th:errors="*{firstName}"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" th:field="*{lastName}" placeholder="Doe" required />
+                        <span class="field-error" th:if="${#fields.hasErrors('lastName')}"
+                            th:errors="*{lastName}"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" th:field="*{email}" placeholder="you@university.edu" required />
+                    <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" th:field="*{password}" placeholder="Minimum 8 characters"
+                        required />
+                    <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" th:field="*{confirmPassword}"
+                        placeholder="Repeat your password" required />
+                    <span class="field-error" th:if="${#fields.hasErrors('confirmPassword')}"
+                        th:errors="*{confirmPassword}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">I am a...</label>
+                    <select id="role" th:field="*{role}" required>
+                        <option value="">Select your role</option>
+                        <option value="STUDENT">Student</option>
+                        <option value="ORGANIZER">Event Organizer</option>
+                    </select>
+                    <span class="field-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </form>
+
+            <p class="auth-footer">
+                Already have an account?
+                <a th:href="@{/auth/login}">Sign in here</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
