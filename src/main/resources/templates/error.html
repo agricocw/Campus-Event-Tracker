@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error — Campus Event Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="error-page">
+            <h1 class="error-code">⚠️</h1>
+            <h2>Something went wrong</h2>
+            <p>An unexpected error occurred. Please try again later.</p>
+            <a th:href="@{/events}" class="btn btn-primary">Back to Events</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Campus Event Tracker — University of Cincinnati</p>
+    </footer>
+</body>
+
+</html>
