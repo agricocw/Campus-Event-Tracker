@@ -43,24 +43,3 @@ jobs:
       - name: Push image to registry
         run: |
           docker push ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository_owner }}/campus-event-tracker:latest
-
-      - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@v1
-        env:
-          IMAGE: ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository_owner }}/campus-event-tracker:latest
-        with:
-          host:     ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key:      ${{ secrets.DEPLOY_SSH_KEY }}
-          envs: IMAGE
-          script: |
-            docker pull $IMAGE
-            docker stop campus-event-tracker || true
-            docker rm   campus-event-tracker || true
-            docker run -d --name campus-event-tracker \
-              -p 8080:8080 \
-              -e SPRING_PROFILES_ACTIVE=prod \
-              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-              -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
-              -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-              $IMAGE
