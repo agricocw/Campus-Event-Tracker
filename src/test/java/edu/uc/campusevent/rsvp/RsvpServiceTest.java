@@ -95,12 +95,15 @@ class RsvpServiceTest {
     void cancelRsvp_existingRsvp_deletesIt() {
         UUID eventId = UUID.randomUUID();
         User user = User.builder().id(UUID.randomUUID()).build();
-        Rsvp rsvp = Rsvp.builder().id(UUID.randomUUID()).build();
+        Event event = Event.builder().id(eventId).rsvps(new ArrayList<>()).build();
+        Rsvp rsvp = Rsvp.builder().id(UUID.randomUUID()).event(event).build();
+        event.getRsvps().add(rsvp);
         when(rsvpRepo.findByUserIdAndEventId(user.getId(), eventId)).thenReturn(Optional.of(rsvp));
         when(rsvpRepo.findFirstByEventIdAndStatusOrderByCreatedAtAsc(eventId, RsvpStatus.WAITLIST))
                 .thenReturn(Optional.empty());
         rsvpService.cancelRsvp(eventId, user);
         verify(rsvpRepo).delete(rsvp);
+        assertThat(event.getRsvps()).doesNotContain(rsvp);
     }
 
     @Test
@@ -108,8 +111,9 @@ class RsvpServiceTest {
         UUID eventId = UUID.randomUUID();
         User user = User.builder().id(UUID.randomUUID()).build();
         User waitUser = User.builder().id(UUID.randomUUID()).email("w@uc.edu").build();
-        Event event = Event.builder().id(eventId).title("E").build();
-        Rsvp rsvp = Rsvp.builder().id(UUID.randomUUID()).build();
+        Event event = Event.builder().id(eventId).title("E").rsvps(new ArrayList<>()).build();
+        Rsvp rsvp = Rsvp.builder().id(UUID.randomUUID()).event(event).build();
+        event.getRsvps().add(rsvp);
         Rsvp waitRsvp = Rsvp.builder().id(UUID.randomUUID()).user(waitUser)
                 .event(event).status(RsvpStatus.WAITLIST).build();
         when(rsvpRepo.findByUserIdAndEventId(user.getId(), eventId)).thenReturn(Optional.of(rsvp));

@@ -51,6 +51,7 @@ public class RsvpService {
     public void cancelRsvp(UUID eventId, User user) {
         Rsvp rsvp = rsvpRepo.findByUserIdAndEventId(user.getId(), eventId)
                 .orElseThrow(() -> new EntityNotFoundException("RSVP not found"));
+        rsvp.getEvent().getRsvps().remove(rsvp);
         rsvpRepo.delete(rsvp);
         promoteFromWaitlist(eventId); // fill the vacated spot
     }
