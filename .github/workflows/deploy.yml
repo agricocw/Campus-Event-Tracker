@@ -9,6 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - uses: actions/checkout@v4
 
@@ -22,26 +26,35 @@ jobs:
         run: mvn -B package -DskipTests
 
       - name: Build Docker image
+        run: docker build -t campus-event-tracker:${{ github.sha }} .
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag Docker image for registry
         run: |
-          docker build -t campus-event-tracker:${{ github.sha }} .
           docker tag campus-event-tracker:${{ github.sha }} \
-            ${{ secrets.DOCKER_REGISTRY }}/campus-event-tracker:latest
+            ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository_owner }}/campus-event-tracker:latest
 
       - name: Push image to registry
-        env:
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: |
-          echo $DOCKER_TOKEN | docker login ${{ secrets.DOCKER_REGISTRY }} -u ci --password-stdin
-          docker push ${{ secrets.DOCKER_REGISTRY }}/campus-event-tracker:latest
+          docker push ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository_owner }}/campus-event-tracker:latest
 
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1
+        env:
+          IMAGE: ${{ secrets.DOCKER_REGISTRY }}/${{ github.repository_owner }}/campus-event-tracker:latest
         with:
           host:     ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key:      ${{ secrets.DEPLOY_SSH_KEY }}
+          envs: IMAGE
           script: |
-            docker pull ${{ secrets.DOCKER_REGISTRY }}/campus-event-tracker:latest
+            docker pull $IMAGE
             docker stop campus-event-tracker || true
             docker rm   campus-event-tracker || true
             docker run -d --name campus-event-tracker \
@@ -50,4 +63,4 @@ jobs:
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
               -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
               -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-              ${{ secrets.DOCKER_REGISTRY }}/campus-event-tracker:latest
+              $IMAGE
