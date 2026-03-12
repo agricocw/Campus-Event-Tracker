@@ -55,4 +55,19 @@ public class AuthController {
             return "auth/register";
         }
     }
+
+    @PostMapping("/logout")
+    public String logout(jakarta.servlet.http.HttpServletRequest request,
+                         jakarta.servlet.http.HttpServletResponse response) {
+
+        org.springframework.security.core.Authentication auth =
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null) {
+            new org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler()
+                    .logout(request, response, auth);
+        }
+
+        return "redirect:/auth/login?logout";
+    }
 }
