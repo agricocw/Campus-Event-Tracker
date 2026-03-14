@@ -2,7 +2,6 @@ package edu.uc.campusevent.domain.event;
 
 import edu.uc.campusevent.domain.rsvp.RsvpService;
 import edu.uc.campusevent.domain.user.User;
-import edu.uc.campusevent.domain.user.UserService;
 import edu.uc.campusevent.shared.dto.CreateEventForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +24,6 @@ import java.util.UUID;
 public class EventController {
 
     private final EventService eventService;
-    private final UserService userService;
     private final RsvpService rsvpService;
 
     // GET /events?page=0&size=10&category=Workshop&q=spring
@@ -64,13 +61,12 @@ public class EventController {
     // GET /events/{id}
     @GetMapping("/{id}")
     public String eventDetail(@PathVariable UUID id,
-            @AuthenticationPrincipal UserDetails principal,
+            @AuthenticationPrincipal User principal,
             Model model) {
         Event event = eventService.findById(id);
         model.addAttribute("event", event);
         if (principal != null) {
-            User user = userService.findByEmail(principal.getUsername());
-            boolean hasRsvp = eventService.hasRsvp(id, user.getId());
+            boolean hasRsvp = eventService.hasRsvp(id, principal.getId());
             model.addAttribute("hasRsvp", hasRsvp);
         }
         return "events/detail";
@@ -79,10 +75,9 @@ public class EventController {
     // POST /events/{id}/rsvp
     @PostMapping("/{id}/rsvp")
     public String rsvp(@PathVariable UUID id,
-            @AuthenticationPrincipal UserDetails principal,
+            @AuthenticationPrincipal User principal,
             RedirectAttributes ra) {
-        User user = userService.findByEmail(principal.getUsername());
-        rsvpService.rsvpToEvent(id, user);
+        rsvpService.rsvpToEvent(id, principal);
         ra.addFlashAttribute("success", "You're registered! Check My Events.");
         return "redirect:/events/" + id;
     }
@@ -90,10 +85,9 @@ public class EventController {
     // #3 — POST /events/{id}/cancel-rsvp
     @PostMapping("/{id}/cancel-rsvp")
     public String cancelRsvp(@PathVariable UUID id,
-            @AuthenticationPrincipal UserDetails principal,
+            @AuthenticationPrincipal User principal,
             RedirectAttributes ra) {
-        User user = userService.findByEmail(principal.getUsername());
-        rsvpService.cancelRsvp(id, user);
+        rsvpService.cancelRsvp(id, principal);
         ra.addFlashAttribute("success", "RSVP cancelled.");
         return "redirect:/events/" + id;
     }
@@ -110,12 +104,11 @@ public class EventController {
     public String createSubmit(
             @Valid @ModelAttribute("form") CreateEventForm form,
             BindingResult result,
-            @AuthenticationPrincipal UserDetails principal,
+            @AuthenticationPrincipal User principal,
             RedirectAttributes ra) {
         if (result.hasErrors())
             return "events/create";
-        User organizer = userService.findByEmail(principal.getUsername());
-        Event event = eventService.createEvent(form, organizer);
+        Event event = eventService.createEvent(form, principal);
         ra.addFlashAttribute("success", "Event created as draft.");
         return "redirect:/events/" + event.getId();
     }
@@ -123,11 +116,10 @@ public class EventController {
     // #5 — GET /events/{id}/edit
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable UUID id,
-            @AuthenticationPrincipal UserDetails principal,
+            @AuthenticationPrincipal User principal,
             Model model) {
-        User user = userService.findByEmail(principal.getUsername());
         Event event = eventService.findById(id);
-        eventService.checkOwner(event, user);
+        eventService.checkOwner(event, principal);
 
         CreateEventForm form = new CreateEventForm();
         form.setTitle(event.getTitle());
@@ -148,15 +140,14 @@ public class EventController {
     public String editSubmit(@PathVariable UUID id,
             @Valid @ModelAttribute("form") CreateEventForm form,
             BindingResult result,
-            @AuthenticationPrincipal UserDetails principal,
+            @AuthenticationPrincipal User principal,
             RedirectAttributes ra,
             Model model) {
         if (result.hasErrors()) {
             model.addAttribute("eventId", id);
             return "events/edit";
         }
-        User user = userService.findByEmail(principal.getUsername());
-        eventService.updateEvent(id, form, user);
+        eventService.updateEvent(id, form, principal);
         ra.addFlashAttribute("success", "Event updated!");
         return "redirect:/events/" + id;
     }
@@ -164,11 +155,31 @@ public class EventController {
     // POST /events/{id}/publish
     @PostMapping("/{id}/publish")
     public String publishEvent(@PathVariable UUID id,
-            @AuthenticationPrincipal UserDetails principal,
+            @AuthenticationPrincipal User principal,
             RedirectAttributes ra) {
-        User user = userService.findByEmail(principal.getUsername());
-        eventService.publishEvent(id, user);
+        eventService.publishEvent(id, principal);
         ra.addFlashAttribute("success", "Event published!");
         return "redirect:/events/" + id;
+    }
+
+    // GET /events/{id}/delete — confirmation page
+    @GetMapping("/{id}/delete")
+    public String deleteConfirm(@PathVariable UUID id,
+            @AuthenticationPrincipal User principal,
+            Model model) {
+        Event event = eventService.findById(id);
+        eventService.checkOwner(event, principal);
+        model.addAttribute("event", event);
+        return "events/delete";
+    }
+
+    // POST /events/{id}/delete
+    @PostMapping("/{id}/delete")
+    public String deleteSubmit(@PathVariable UUID id,
+            @AuthenticationPrincipal User principal,
+            RedirectAttributes ra) {
+        eventService.deleteEvent(id, principal);
+        ra.addFlashAttribute("success", "Event deleted.");
+        return "redirect:/user/my-created-events";
     }
 }
