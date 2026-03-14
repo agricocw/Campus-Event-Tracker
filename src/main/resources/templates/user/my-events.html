@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Events — Campus Event Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
+            <div class="nav-links">
+                <a th:href="@{/events}" class="nav-link">Events</a>
+                <span sec:authorize="hasRole('ORGANIZER')">
+                    <a th:href="@{/events/create}" class="nav-link btn-create">+ Create Event</a>
+                </span>
+                <span sec:authorize="isAuthenticated()" class="nav-user">
+                    <a th:href="@{/user/my-events}" class="nav-link active">My Events</a>
+                    <span class="nav-username" sec:authentication="name"></span>
+                    <form th:action="@{/auth/logout}" method="post" class="inline-form">
+                        <button type="submit" class="btn-logout">Logout</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">My RSVPs</h1>
+
+        <div class="event-grid" th:if="${!rsvps.isEmpty()}">
+            <div th:each="rsvp : ${rsvps}" class="event-card">
+                <div class="event-card-header">
+                    <span class="event-category" th:text="${rsvp.event.category}">Category</span>
+                    <span class="rsvp-status" th:text="${rsvp.status.name()}"
+                        th:classappend="${rsvp.status.name() == 'ATTENDING'} ? 'status-attending' : 'status-waitlist'">
+                    </span>
+                </div>
+                <h3 class="event-title" th:text="${rsvp.event.title}">Event Title</h3>
+                <div class="event-meta">
+                    <p class="event-date">
+                        📅 <span th:text="${#temporals.format(rsvp.event.startTime, 'MMM dd, yyyy h:mm a')}">Date</span>
+                    </p>
+                    <p class="event-location">
+                        📍 <span th:text="${rsvp.event.location}">Location</span>
+                    </p>
+                </div>
+                <a th:href="@{/events/{id}(id=${rsvp.event.id})}" class="btn btn-outline">View Details →</a>
+            </div>
+        </div>
+
+        <div class="empty-state" th:if="${rsvps.isEmpty()}">
+            <h3>No RSVPs yet</h3>
+            <p>Browse events and RSVP to ones that interest you!</p>
+            <a th:href="@{/events}" class="btn btn-primary">Browse Events</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Campus Event Tracker — University of Cincinnati</p>
+    </footer>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+
+</html>

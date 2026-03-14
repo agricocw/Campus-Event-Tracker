@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Access Denied — Campus Event Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+</head>
+
+<body>
+    <div class="error-container">
+        <div class="error-card">
+            <h1 class="error-code">403</h1>
+            <h2>Access Denied</h2>
+            <p th:text="${message} ?: 'You don\'t have permission to access this page.'">
+                Access denied message
+            </p>
+            <a th:href="@{/events}" class="btn btn-primary">← Back to Events</a>
+        </div>
+    </div>
+</body>
+
+</html>

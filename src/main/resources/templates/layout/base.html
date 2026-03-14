@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${pageTitle} ?: 'Campus Event Tracker'">CET</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
+
+            <div class="nav-links">
+                <a th:href="@{/events}" class="nav-link">Events</a>
+
+                <!-- Only show 'Create Event' to organizers -->
+                <span sec:authorize="hasRole('ORGANIZER')">
+                    <a th:href="@{/events/create}" class="nav-link btn-create">+ Create Event</a>
+                </span>
+
+                <!-- Show login/register when NOT logged in -->
+                <span sec:authorize="isAnonymous()">
+                    <a th:href="@{/auth/login}" class="nav-link">Login</a>
+                    <a th:href="@{/auth/register}" class="nav-link btn-register">Register</a>
+                </span>
+
+                <!-- Show user info and logout when logged in -->
+                <span sec:authorize="isAuthenticated()" class="nav-user">
+                    <a th:href="@{/user/my-events}" class="nav-link">My Events</a>
+                    <span class="nav-username" sec:authentication="name"></span>
+                    <form th:action="@{/auth/logout}" method="post" class="inline-form">
+                        <button type="submit" class="btn-logout">Logout</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- FLASH MESSAGES -->
+    <div class="container">
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <!-- PAGE CONTENT (replaced by each page) -->
+        <main th:fragment="content">
+            <!-- child pages replace this fragment -->
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Campus Event Tracker — University of Cincinnati</p>
+    </footer>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>
