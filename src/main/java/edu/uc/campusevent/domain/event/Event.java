@@ -19,8 +19,7 @@ import java.util.UUID;
         @Index(name = "idx_event_status", columnList = "status"),
         @Index(name = "idx_event_org", columnList = "organizer_id")
 })
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
