@@ -3,7 +3,7 @@ package edu.uc.campusevent.user;
 import edu.uc.campusevent.domain.event.EventService;
 import edu.uc.campusevent.domain.rsvp.RsvpService;
 import edu.uc.campusevent.domain.user.User;
-import edu.uc.campusevent.domain.user.UserController;
+import edu.uc.campusevent.web.UserController;
 import edu.uc.campusevent.domain.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

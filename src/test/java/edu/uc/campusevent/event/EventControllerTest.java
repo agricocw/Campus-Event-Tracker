@@ -1,6 +1,7 @@
 package edu.uc.campusevent.event;
 
 import edu.uc.campusevent.domain.event.*;
+import edu.uc.campusevent.web.EventController;
 import edu.uc.campusevent.domain.rsvp.RsvpService;
 import edu.uc.campusevent.domain.user.User;
 import edu.uc.campusevent.domain.user.UserService;

@@ -1,5 +1,8 @@
-package edu.uc.campusevent.domain.event;
+package edu.uc.campusevent.web;
 
+import edu.uc.campusevent.domain.event.Event;
+import edu.uc.campusevent.domain.event.EventCategory;
+import edu.uc.campusevent.domain.event.EventService;
 import edu.uc.campusevent.domain.rsvp.RsvpService;
 import edu.uc.campusevent.domain.user.User;
 import edu.uc.campusevent.domain.user.UserService;
@@ -56,8 +59,7 @@ public class EventController {
         model.addAttribute("events", events);
         model.addAttribute("category", category);
         model.addAttribute("q", q);
-        model.addAttribute("categories",
-                java.util.List.of("Academic", "Social", "Sports", "Arts", "Career", "Workshop", "Other"));
+        model.addAttribute("categories", EventCategory.values());
         return "events/list";
     }
 

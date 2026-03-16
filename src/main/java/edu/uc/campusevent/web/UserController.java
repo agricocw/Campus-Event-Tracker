@@ -1,9 +1,11 @@
-package edu.uc.campusevent.domain.user;
+package edu.uc.campusevent.web;
 
 import edu.uc.campusevent.domain.event.Event;
 import edu.uc.campusevent.domain.event.EventService;
 import edu.uc.campusevent.domain.rsvp.Rsvp;
 import edu.uc.campusevent.domain.rsvp.RsvpService;
+import edu.uc.campusevent.domain.user.User;
+import edu.uc.campusevent.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
