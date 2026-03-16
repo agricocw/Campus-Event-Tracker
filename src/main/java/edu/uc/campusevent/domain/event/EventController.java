@@ -56,8 +56,7 @@ public class EventController {
         model.addAttribute("events", events);
         model.addAttribute("category", category);
         model.addAttribute("q", q);
-        model.addAttribute("categories",
-                java.util.List.of("Academic", "Social", "Sports", "Arts", "Career", "Workshop", "Other"));
+        model.addAttribute("categories", EventCategory.values());
         return "events/list";
     }
 
