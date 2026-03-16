@@ -1,5 +1,8 @@
 package edu.uc.campusevent.web;
 
+import.edu.uc.campusevent.domain.event.Event;
+import.edu.uc.campusevent.domain.event.EventCategory;
+import.edu.uc.campusevent.domain.event.EventService;
 import edu.uc.campusevent.domain.rsvp.RsvpService;
 import edu.uc.campusevent.domain.user.User;
 import edu.uc.campusevent.domain.user.UserService;
