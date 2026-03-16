@@ -1,6 +1,5 @@
 package edu.uc.campusevent.domain.event;
 
-import edu.uc.campusevent.domain.notification.NotificationService;
 import edu.uc.campusevent.domain.rsvp.RsvpRepository;
 import edu.uc.campusevent.domain.user.User;
 import edu.uc.campusevent.shared.dto.CreateEventForm;
@@ -26,7 +25,6 @@ public class EventService {
 
     private final EventRepository eventRepo;
     private final RsvpRepository rsvpRepo;
-    private final NotificationService notifService;
 
     @Cacheable(value = "events", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     @Transactional(readOnly = true)
