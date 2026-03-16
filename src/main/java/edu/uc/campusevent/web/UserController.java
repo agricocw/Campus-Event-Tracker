@@ -1,4 +1,4 @@
-package edu.uc.campusevent.domain.user;
+package edu.uc.campusevent.web;
 
 import edu.uc.campusevent.domain.event.Event;
 import edu.uc.campusevent.domain.event.EventService;
