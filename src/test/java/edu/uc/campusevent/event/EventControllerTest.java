@@ -3,7 +3,6 @@ package edu.uc.campusevent.event;
 import edu.uc.campusevent.domain.event.*;
 import edu.uc.campusevent.domain.rsvp.RsvpService;
 import edu.uc.campusevent.domain.user.User;
-import edu.uc.campusevent.domain.user.UserService;
 import edu.uc.campusevent.shared.dto.CreateEventForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -32,21 +30,17 @@ import static org.mockito.Mockito.*;
 class EventControllerTest {
 
     @Mock EventService eventService;
-    @Mock UserService userService;
     @Mock RsvpService rsvpService;
     @InjectMocks EventController controller;
 
     Model model;
     RedirectAttributesModelMap ra;
-    UserDetails principal;
     User testUser;
 
     @BeforeEach
     void setUp() {
         model = new ConcurrentModel();
         ra = new RedirectAttributesModelMap();
-        principal = org.springframework.security.core.userdetails.User
-                .withUsername("test@uc.edu").password("p").roles("STUDENT").build();
         testUser = User.builder().id(UUID.randomUUID()).email("test@uc.edu").build();
     }
 
@@ -96,9 +90,8 @@ class EventControllerTest {
         UUID id = UUID.randomUUID();
         Event event = Event.builder().id(id).build();
         when(eventService.findById(id)).thenReturn(event);
-        when(userService.findByEmail("test@uc.edu")).thenReturn(testUser);
         when(eventService.hasRsvp(id, testUser.getId())).thenReturn(true);
-        String view = controller.eventDetail(id, principal, model);
+        String view = controller.eventDetail(id, testUser, model);
         assertThat(view).isEqualTo("events/detail");
         assertThat(model.getAttribute("hasRsvp")).isEqualTo(true);
     }
@@ -113,16 +106,14 @@ class EventControllerTest {
     @Test
     void rsvp_redirectsToEventDetail() {
         UUID id = UUID.randomUUID();
-        when(userService.findByEmail("test@uc.edu")).thenReturn(testUser);
-        assertThat(controller.rsvp(id, principal, ra)).isEqualTo("redirect:/events/" + id);
+        assertThat(controller.rsvp(id, testUser, ra)).isEqualTo("redirect:/events/" + id);
         verify(rsvpService).rsvpToEvent(id, testUser);
     }
 
     @Test
     void cancelRsvp_redirectsToEventDetail() {
         UUID id = UUID.randomUUID();
-        when(userService.findByEmail("test@uc.edu")).thenReturn(testUser);
-        assertThat(controller.cancelRsvp(id, principal, ra)).isEqualTo("redirect:/events/" + id);
+        assertThat(controller.cancelRsvp(id, testUser, ra)).isEqualTo("redirect:/events/" + id);
         verify(rsvpService).cancelRsvp(id, testUser);
     }
 
@@ -138,9 +129,8 @@ class EventControllerTest {
         form.setTitle("T");
         BindingResult br = new BeanPropertyBindingResult(form, "form");
         Event created = Event.builder().id(UUID.randomUUID()).build();
-        when(userService.findByEmail("test@uc.edu")).thenReturn(testUser);
         when(eventService.createEvent(form, testUser)).thenReturn(created);
-        assertThat(controller.createSubmit(form, br, principal, ra))
+        assertThat(controller.createSubmit(form, br, testUser, ra))
                 .isEqualTo("redirect:/events/" + created.getId());
     }
 
@@ -149,7 +139,7 @@ class EventControllerTest {
         CreateEventForm form = new CreateEventForm();
         BindingResult br = new BeanPropertyBindingResult(form, "form");
         br.rejectValue("title", "e", "required");
-        assertThat(controller.createSubmit(form, br, principal, ra)).isEqualTo("events/create");
+        assertThat(controller.createSubmit(form, br, testUser, ra)).isEqualTo("events/create");
     }
 
     @Test
@@ -158,9 +148,8 @@ class EventControllerTest {
         Event event = Event.builder().id(id).title("T").description("D").category("C")
                 .location("L").startTime(LocalDateTime.now()).endTime(LocalDateTime.now().plusHours(1))
                 .capacity(30).tags(List.of("a", "b")).organizer(testUser).build();
-        when(userService.findByEmail("test@uc.edu")).thenReturn(testUser);
         when(eventService.findById(id)).thenReturn(event);
-        assertThat(controller.editForm(id, principal, model)).isEqualTo("events/edit");
+        assertThat(controller.editForm(id, testUser, model)).isEqualTo("events/edit");
         assertThat(model.getAttribute("eventId")).isEqualTo(id);
     }
 
@@ -170,8 +159,7 @@ class EventControllerTest {
         CreateEventForm form = new CreateEventForm();
         form.setTitle("U");
         BindingResult br = new BeanPropertyBindingResult(form, "form");
-        when(userService.findByEmail("test@uc.edu")).thenReturn(testUser);
-        assertThat(controller.editSubmit(id, form, br, principal, ra, model))
+        assertThat(controller.editSubmit(id, form, br, testUser, ra, model))
                 .isEqualTo("redirect:/events/" + id);
     }
 
@@ -181,7 +169,7 @@ class EventControllerTest {
         CreateEventForm form = new CreateEventForm();
         BindingResult br = new BeanPropertyBindingResult(form, "form");
         br.rejectValue("title", "e", "required");
-        assertThat(controller.editSubmit(id, form, br, principal, ra, model))
+        assertThat(controller.editSubmit(id, form, br, testUser, ra, model))
                 .isEqualTo("events/edit");
         assertThat(model.getAttribute("eventId")).isEqualTo(id);
     }
@@ -189,9 +177,25 @@ class EventControllerTest {
     @Test
     void publishEvent_redirectsToEvent() {
         UUID id = UUID.randomUUID();
-        when(userService.findByEmail("test@uc.edu")).thenReturn(testUser);
-        assertThat(controller.publishEvent(id, principal, ra))
+        assertThat(controller.publishEvent(id, testUser, ra))
                 .isEqualTo("redirect:/events/" + id);
         verify(eventService).publishEvent(id, testUser);
+    }
+
+    @Test
+    void deleteConfirm_returnsDeleteView() {
+        UUID id = UUID.randomUUID();
+        Event event = Event.builder().id(id).title("T").organizer(testUser).build();
+        when(eventService.findById(id)).thenReturn(event);
+        assertThat(controller.deleteConfirm(id, testUser, model)).isEqualTo("events/delete");
+        assertThat(model.getAttribute("event")).isEqualTo(event);
+    }
+
+    @Test
+    void deleteSubmit_redirectsToMyCreatedEvents() {
+        UUID id = UUID.randomUUID();
+        assertThat(controller.deleteSubmit(id, testUser, ra))
+                .isEqualTo("redirect:/user/my-created-events");
+        verify(eventService).deleteEvent(id, testUser);
     }
 }

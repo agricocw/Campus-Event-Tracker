@@ -117,6 +117,7 @@
             <!-- #5 — Edit button for organizer on their events -->
             <div class="event-actions" sec:authorize="hasRole('ORGANIZER')">
                 <a th:href="@{/events/{id}/edit(id=${event.id})}" class="btn btn-outline">✏️ Edit Event</a>
+                <a th:href="@{/events/{id}/delete(id=${event.id})}" class="btn btn-danger">🗑️ Delete Event</a>
             </div>
 
             <!-- Publish button for organizer on DRAFT events -->

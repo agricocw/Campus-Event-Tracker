@@ -106,6 +106,13 @@ public class EventService {
         return eventRepo.save(event);
     }
 
+    @CacheEvict(value = "events", allEntries = true)
+    public void deleteEvent(UUID eventId, User requestingUser) {
+        Event event = findOrThrow(eventId);
+        checkOwner(event, requestingUser);
+        eventRepo.delete(event);
+    }
+
     /** Verifies that requestingUser is the event organizer. */
     public void checkOwner(Event event, User requestingUser) {
         if (!event.getOrganizer().getId().equals(requestingUser.getId())) {

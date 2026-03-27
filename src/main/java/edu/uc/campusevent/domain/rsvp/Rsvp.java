@@ -11,8 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "rsvps", uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "event_id" }))
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

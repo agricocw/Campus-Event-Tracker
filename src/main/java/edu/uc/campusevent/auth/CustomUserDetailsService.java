@@ -1,6 +1,5 @@
 package edu.uc.campusevent.auth;
 
-import edu.uc.campusevent.domain.user.User;
 import edu.uc.campusevent.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,14 +15,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No user: " + email));
-
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPasswordHash())
-                .roles(user.getRole().name()) // STUDENT -> ROLE_STUDENT
-                .accountLocked(!user.isEnabled())
-                .build();
     }
 }
