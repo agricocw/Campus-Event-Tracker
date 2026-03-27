@@ -81,6 +81,13 @@
                         </span>
                     </p>
                 </div>
+                <div class="event-tags" th:if="${!event.tags.isEmpty()}">
+                    <a th:each="t : ${event.tags}"
+                       th:href="@{/events(tag=${t})}"
+                       th:text="${t}"
+                       class="event-tag"
+                       th:classappend="${tag == t} ? ' active' : ''"></a>
+                </div>
                 <a th:href="@{/events/{id}(id=${event.id})}" class="btn btn-outline">View Details →</a>
             </div>
         </div>
@@ -90,15 +97,16 @@
             <h3>No events found</h3>
             <p th:if="${q != null && !q.isBlank()}" th:text="'No results for: ' + ${q}"></p>
             <p th:if="${category != null}" th:text="'No events in category: ' + ${category}"></p>
-            <p th:if="${q == null && category == null}">Check back later or create one if you're an organizer!</p>
+            <p th:if="${tag != null}" th:text="'No events tagged: ' + ${tag}"></p>
+            <p th:if="${q == null && category == null && tag == null}">Check back later or create one if you're an organizer!</p>
         </div>
 
         <!-- Pagination -->
         <div class="pagination" th:if="${events.totalPages > 1}">
-            <a th:if="${!events.first}" th:href="@{/events(page=${events.number - 1}, category=${category}, q=${q})}"
+            <a th:if="${!events.first}" th:href="@{/events(page=${events.number - 1}, category=${category}, q=${q}, tag=${tag})}"
                 class="btn btn-outline">← Previous</a>
             <span class="page-info" th:text="|Page ${events.number + 1} of ${events.totalPages}|"></span>
-            <a th:if="${!events.last}" th:href="@{/events(page=${events.number + 1}, category=${category}, q=${q})}"
+            <a th:if="${!events.last}" th:href="@{/events(page=${events.number + 1}, category=${category}, q=${q}, tag=${tag})}"
                 class="btn btn-outline">Next →</a>
         </div>
     </div>

@@ -748,6 +748,38 @@ a:hover {
     margin-top: 0.75rem;
 }
 
+/* ── Event Tag Chips ────────────────────────────────────────── */
+.event-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+}
+
+.event-tag {
+    padding: 0.2rem 0.625rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.event-tag:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+    text-decoration: none;
+}
+
+.event-tag.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
 /* ── Event Card Actions (#8) ────────────────────────────────── */
 .event-card-actions {
     display: flex;
