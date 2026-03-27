@@ -46,6 +46,11 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Event> getByTag(String tag, Pageable pageable) {
+        return eventRepo.findByTag(tag, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Event findById(UUID id) {
         return findOrThrow(id);
     }

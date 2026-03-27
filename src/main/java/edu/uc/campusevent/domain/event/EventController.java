@@ -26,13 +26,14 @@ public class EventController {
     private final EventService eventService;
     private final RsvpService rsvpService;
 
-    // GET /events?page=0&size=10&category=Workshop&q=spring
+    // GET /events?page=0&size=10&category=Workshop&q=spring&tag=career-fair
     @GetMapping
     public String listEvents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String q,
+            @RequestParam(required = false) String tag,
             Model model) {
 
         // #11 — Cap pagination size at 50
@@ -46,6 +47,8 @@ public class EventController {
         } else if (category != null && !category.isBlank()) {
             // #7 — Category filtering
             events = eventService.getByCategory(category, pageable);
+        } else if (tag != null && !tag.isBlank()) {
+            events = eventService.getByTag(tag, pageable);
         } else {
             events = eventService.getPublishedEvents(pageable);
         }
@@ -53,6 +56,7 @@ public class EventController {
         model.addAttribute("events", events);
         model.addAttribute("category", category);
         model.addAttribute("q", q);
+        model.addAttribute("tag", tag);
         model.addAttribute("categories",
                 java.util.List.of("Academic", "Social", "Sports", "Arts", "Career", "Workshop", "Other"));
         return "events/list";
