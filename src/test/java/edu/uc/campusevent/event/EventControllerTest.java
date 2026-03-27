@@ -47,42 +47,49 @@ class EventControllerTest {
     @Test
     void listEvents_default_returnsPublishedEvents() {
         when(eventService.getPublishedEvents(any())).thenReturn(Page.empty());
-        assertThat(controller.listEvents(0, 10, null, null, model)).isEqualTo("events/list");
+        assertThat(controller.listEvents(0, 10, null, null, null, model)).isEqualTo("events/list");
     }
 
     @Test
     void listEvents_withSearch_callsSearch() {
         when(eventService.search(eq("spring"), any())).thenReturn(Page.empty());
-        controller.listEvents(0, 10, null, "spring", model);
+        controller.listEvents(0, 10, null, "spring", null, model);
         verify(eventService).search(eq("spring"), any());
     }
 
     @Test
     void listEvents_withCategory_filtersCategory() {
         when(eventService.getByCategory(eq("Workshop"), any())).thenReturn(Page.empty());
-        controller.listEvents(0, 10, "Workshop", null, model);
+        controller.listEvents(0, 10, "Workshop", null, null, model);
         verify(eventService).getByCategory(eq("Workshop"), any());
     }
 
     @Test
     void listEvents_capsPageSizeAt50() {
         when(eventService.getPublishedEvents(any())).thenReturn(Page.empty());
-        controller.listEvents(0, 100, null, null, model);
+        controller.listEvents(0, 100, null, null, null, model);
         verify(eventService).getPublishedEvents(argThat(p -> p.getPageSize() == 50));
     }
 
     @Test
     void listEvents_blankSearch_returnsPublished() {
         when(eventService.getPublishedEvents(any())).thenReturn(Page.empty());
-        controller.listEvents(0, 10, null, "  ", model);
+        controller.listEvents(0, 10, null, "  ", null, model);
         verify(eventService).getPublishedEvents(any());
     }
 
     @Test
     void listEvents_blankCategory_returnsPublished() {
         when(eventService.getPublishedEvents(any())).thenReturn(Page.empty());
-        controller.listEvents(0, 10, "  ", null, model);
+        controller.listEvents(0, 10, "  ", null, null, model);
         verify(eventService).getPublishedEvents(any());
+    }
+
+    @Test
+    void listEvents_withTag_filtersTag() {
+        when(eventService.getByTag(eq("career-fair"), any())).thenReturn(Page.empty());
+        controller.listEvents(0, 10, null, null, "career-fair", model);
+        verify(eventService).getByTag(eq("career-fair"), any());
     }
 
     @Test
