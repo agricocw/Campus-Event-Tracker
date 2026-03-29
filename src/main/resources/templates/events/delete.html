@@ -9,20 +9,7 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
-            <div class="nav-links">
-                <a th:href="@{/events}" class="nav-link">Events</a>
-                <a th:href="@{/events/create}" class="nav-link btn-create">+ Create Event</a>
-                <span class="nav-username" sec:authentication="name"
-                    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"></span>
-                <form th:action="@{/auth/logout}" method="post" class="inline-form">
-                    <button type="submit" class="btn-logout">Logout</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="~{layout/base :: navbar}"></nav>
 
     <div class="container">
         <a th:href="@{/events/{id}(id=${event.id})}" class="back-link">← Back to Event</a>

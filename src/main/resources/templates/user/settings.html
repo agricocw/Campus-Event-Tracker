@@ -9,21 +9,7 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
-            <div class="nav-links">
-                <a th:href="@{/events}" class="nav-link">Events</a>
-                <span sec:authorize="isAuthenticated()" class="nav-user">
-                    <a th:href="@{/user/my-events}" class="nav-link">My Events</a>
-                    <span class="nav-username" sec:authentication="name"></span>
-                    <form th:action="@{/auth/logout}" method="post" class="inline-form">
-                        <button type="submit" class="btn-logout">Logout</button>
-                    </form>
-                </span>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="~{layout/base :: navbar}"></nav>
 
     <div class="container">
         <h1 class="page-title">Account Settings</h1>
