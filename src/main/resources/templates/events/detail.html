@@ -55,6 +55,13 @@
                             / <span th:text="${event.capacity}">∞</span> capacity
                         </span>
                     </p>
+                    <div th:if="${event.capacity != null}" class="capacity-bar-wrapper">
+                        <div class="capacity-bar"
+                             th:with="pct=${event.attendeeCount * 100 / event.capacity}"
+                             th:classappend="${pct >= 90} ? 'capacity-critical' : (${pct >= 60} ? 'capacity-warning' : 'capacity-ok')"
+                             th:style="'width: ' + ${pct > 100 ? 100 : pct} + '%'">
+                        </div>
+                    </div>
                 </div>
                 <div class="meta-item">
                     <strong>🎯 Organized by</strong>

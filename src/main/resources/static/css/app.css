@@ -507,6 +507,25 @@ a:hover {
     color: var(--gray-600);
 }
 
+.capacity-bar-wrapper {
+    margin-top: 0.5rem;
+    height: 6px;
+    max-width: 140px;
+    background: var(--gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.capacity-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.capacity-ok       { background: #38a169; }
+.capacity-warning  { background: #d69e2e; }
+.capacity-critical { background: #e53e3e; }
+
 .event-description {
     margin-bottom: 1.5rem;
 }
