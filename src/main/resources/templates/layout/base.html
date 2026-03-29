@@ -5,12 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${pageTitle} ?: 'Campus Event Tracker'">CET</title>
+    <meta name="_csrf" th:content="${_csrf.token}" />
     <link rel="stylesheet" th:href="@{/css/app.css}" />
 </head>
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar">
+    <nav class="navbar" th:fragment="navbar">
         <div class="nav-container">
             <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
 
@@ -31,6 +32,26 @@
                 <!-- Show user info and logout when logged in -->
                 <span sec:authorize="isAuthenticated()" class="nav-user">
                     <a th:href="@{/user/my-events}" class="nav-link">My Events</a>
+                    <div class="nav-notifications" id="notifDropdownWrapper">
+                        <button class="nav-link notif-toggle" id="notifToggle" type="button">
+                            Notifications
+                            <span th:if="${unreadNotificationCount > 0}"
+                                  th:text="${unreadNotificationCount}"
+                                  class="notif-badge"
+                                  id="notifBadge"></span>
+                        </button>
+                        <div class="notif-dropdown" id="notifDropdown">
+                            <div th:if="${#lists.isEmpty(unreadNotifications)}" class="notif-empty">
+                                No new notifications
+                            </div>
+                            <div th:each="n : ${unreadNotifications}"
+                                 class="notif-item"
+                                 th:attr="data-id=${n.id}">
+                                <span class="notif-message" th:text="${n.message}"></span>
+                                <button class="notif-dismiss" type="button" aria-label="Dismiss">&times;</button>
+                            </div>
+                        </div>
+                    </div>
                     <span class="nav-username" sec:authentication="name"></span>
                     <form th:action="@{/auth/logout}" method="post" class="inline-form">
                         <button type="submit" class="btn-logout">Logout</button>
