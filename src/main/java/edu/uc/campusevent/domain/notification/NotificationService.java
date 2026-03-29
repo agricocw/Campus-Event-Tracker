@@ -30,6 +30,15 @@ public class NotificationService {
         log.info("RSVP notification sent to {} for event {}", user.getEmail(), event.getTitle());
     }
 
+    public void markAsRead(java.util.UUID notificationId, java.util.UUID userId) {
+        notificationRepository.findById(notificationId).ifPresent(n -> {
+            if (n.getUser().getId().equals(userId)) {
+                n.setRead(true);
+                notificationRepository.save(n);
+            }
+        });
+    }
+
     public void sendWaitlistPromotion(User user, Event event) {
         Notification notification = Notification.builder()
                 .user(user)
