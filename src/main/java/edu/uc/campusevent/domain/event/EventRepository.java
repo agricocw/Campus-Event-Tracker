@@ -34,4 +34,9 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
         @Query("SELECT e FROM Event e WHERE e.status = 'PUBLISHED' " +
                         "AND LOWER(e.title) LIKE LOWER(CONCAT('%', :q, '%'))")
         Page<Event> searchByTitle(@Param("q") String query, Pageable pageable);
+
+        // Tag filter — matches events that contain the given tag (case-insensitive)
+        @Query("SELECT e FROM Event e JOIN e.tags t WHERE e.status = 'PUBLISHED' " +
+                        "AND LOWER(t) = LOWER(:tag)")
+        Page<Event> findByTag(@Param("tag") String tag, Pageable pageable);
 }

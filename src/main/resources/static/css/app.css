@@ -137,6 +137,104 @@ a:hover {
     font-size: 0.875rem;
 }
 
+.nav-notifications {
+    position: relative;
+}
+
+.notif-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--radius);
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+.notif-toggle:hover {
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.notif-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #e53e3e;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.notif-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 300px;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.notif-dropdown.open {
+    display: block;
+}
+
+.notif-empty {
+    padding: 1rem;
+    color: var(--gray-500);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 0.875rem;
+}
+
+.notif-item:last-child {
+    border-bottom: none;
+}
+
+.notif-message {
+    color: var(--gray-700);
+    flex: 1;
+}
+
+.notif-dismiss {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-400);
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.notif-dismiss:hover {
+    color: #e53e3e;
+}
+
 .btn-create {
     background: var(--primary);
     color: var(--white) !important;
@@ -408,6 +506,25 @@ a:hover {
 .meta-item p {
     color: var(--gray-600);
 }
+
+.capacity-bar-wrapper {
+    margin-top: 0.5rem;
+    height: 6px;
+    max-width: 140px;
+    background: var(--gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.capacity-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.capacity-ok       { background: #38a169; }
+.capacity-warning  { background: #d69e2e; }
+.capacity-critical { background: #e53e3e; }
 
 .event-description {
     margin-bottom: 1.5rem;
@@ -746,6 +863,38 @@ a:hover {
 
 .cancel-form {
     margin-top: 0.75rem;
+}
+
+/* ── Event Tag Chips ────────────────────────────────────────── */
+.event-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+}
+
+.event-tag {
+    padding: 0.2rem 0.625rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.event-tag:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+    text-decoration: none;
+}
+
+.event-tag.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
 }
 
 /* ── Event Card Actions (#8) ────────────────────────────────── */

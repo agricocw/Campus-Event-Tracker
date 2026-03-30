@@ -2,6 +2,11 @@
 // Campus Event Tracker — Client-Side JavaScript
 // ════════════════════════════════════════════════════════════════
 
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="_csrf"]');
+    return meta ? meta.getAttribute('content') : '';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // ── Auto-dismiss flash messages after 5 seconds ──────────
@@ -24,6 +29,45 @@ document.addEventListener('DOMContentLoaded', () => {
             if (endTimeInput.value && endTimeInput.value < startTimeInput.value) {
                 endTimeInput.value = startTimeInput.value;
             }
+        });
+    }
+
+    const notifToggle = document.getElementById('notifToggle');
+    const notifDropdown = document.getElementById('notifDropdown');
+
+    if (notifToggle && notifDropdown) {
+        notifToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!notifToggle.contains(e.target) && !notifDropdown.contains(e.target)) {
+                notifDropdown.classList.remove('open');
+            }
+        });
+
+        notifDropdown.addEventListener('click', (e) => {
+            const btn = e.target.closest('.notif-dismiss');
+            if (!btn) return;
+
+            const item = btn.closest('.notif-item');
+            const id = item.dataset.id;
+
+            fetch(`/user/notifications/${id}/read`, { method: 'POST',
+                headers: { 'X-XSRF-TOKEN': getCsrfToken() }
+            }).then(() => {
+                item.remove();
+                const badge = document.getElementById('notifBadge');
+                if (badge) {
+                    const count = parseInt(badge.textContent) - 1;
+                    if (count <= 0) badge.remove();
+                    else badge.textContent = count;
+                }
+                if (!notifDropdown.querySelector('.notif-item')) {
+                    notifDropdown.innerHTML = '<div class="notif-empty">No new notifications</div>';
+                }
+            });
         });
     }
 

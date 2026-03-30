@@ -10,29 +10,7 @@
 
 <body>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a th:href="@{/events}" class="nav-brand">🎓 Campus Event Tracker</a>
-            <div class="nav-links">
-                <a th:href="@{/events}" class="nav-link active">Events</a>
-                <span sec:authorize="hasRole('ORGANIZER')">
-                    <a th:href="@{/events/create}" class="nav-link btn-create">+ Create Event</a>
-                    <a th:href="@{/user/my-created-events}" class="nav-link">My Created Events</a>
-                </span>
-                <span sec:authorize="isAnonymous()">
-                    <a th:href="@{/auth/login}" class="nav-link">Login</a>
-                    <a th:href="@{/auth/register}" class="nav-link btn-register">Register</a>
-                </span>
-                <span sec:authorize="isAuthenticated()" class="nav-user">
-                    <a th:href="@{/user/my-events}" class="nav-link">My Events</a>
-                    <span class="nav-username" sec:authentication="name"></span>
-                    <form th:action="@{/auth/logout}" method="post" class="inline-form">
-                        <button type="submit" class="btn-logout">Logout</button>
-                    </form>
-                </span>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="~{layout/base :: navbar}"></nav>
 
     <div class="container">
         <!-- #9 — Flash messages with close button -->
@@ -80,6 +58,20 @@
                             / <span th:text="${event.capacity}">∞</span>
                         </span>
                     </p>
+                    <div th:if="${event.capacity != null}" class="capacity-bar-wrapper">
+                        <div class="capacity-bar"
+                             th:with="pct=${event.attendeeCount * 100 / event.capacity}"
+                             th:classappend="${pct >= 90} ? 'capacity-critical' : (${pct >= 60} ? 'capacity-warning' : 'capacity-ok')"
+                             th:style="'width: ' + ${pct > 100 ? 100 : pct} + '%'">
+                        </div>
+                    </div>
+                </div>
+                <div class="event-tags" th:if="${!event.tags.isEmpty()}">
+                    <a th:each="t : ${event.tags}"
+                       th:href="@{/events(tag=${t})}"
+                       th:text="${t}"
+                       class="event-tag"
+                       th:classappend="${tag == t} ? ' active' : ''"></a>
                 </div>
                 <a th:href="@{/events/{id}(id=${event.id})}" class="btn btn-outline">View Details →</a>
             </div>
@@ -90,15 +82,16 @@
             <h3>No events found</h3>
             <p th:if="${q != null && !q.isBlank()}" th:text="'No results for: ' + ${q}"></p>
             <p th:if="${category != null}" th:text="'No events in category: ' + ${category}"></p>
-            <p th:if="${q == null && category == null}">Check back later or create one if you're an organizer!</p>
+            <p th:if="${tag != null}" th:text="'No events tagged: ' + ${tag}"></p>
+            <p th:if="${q == null && category == null && tag == null}">Check back later or create one if you're an organizer!</p>
         </div>
 
         <!-- Pagination -->
         <div class="pagination" th:if="${events.totalPages > 1}">
-            <a th:if="${!events.first}" th:href="@{/events(page=${events.number - 1}, category=${category}, q=${q})}"
+            <a th:if="${!events.first}" th:href="@{/events(page=${events.number - 1}, category=${category}, q=${q}, tag=${tag})}"
                 class="btn btn-outline">← Previous</a>
             <span class="page-info" th:text="|Page ${events.number + 1} of ${events.totalPages}|"></span>
-            <a th:if="${!events.last}" th:href="@{/events(page=${events.number + 1}, category=${category}, q=${q})}"
+            <a th:if="${!events.last}" th:href="@{/events(page=${events.number + 1}, category=${category}, q=${q}, tag=${tag})}"
                 class="btn btn-outline">Next →</a>
         </div>
     </div>
