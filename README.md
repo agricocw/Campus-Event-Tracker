@@ -142,10 +142,94 @@ classDiagram
 - GitHub Repository: https://github.com/agricocw/Campus-Event-Tracker/tree/main
 - GitHub Project Board: https://github.com/users/Shamak10/projects/5/views
  
-Milestones
-- Milestone #1: User login, event feed, RSVP functionality
-- Milestone #2: Notifications and reminders
-- Milestone #3: Calendar integration and UI polish
+### Milestone 0: Planning (Week 1-3)
+**Goal:** establish team process, repository structure, and project artifacts before development.
+
+**Deliverables**
+- Finalize team roles and communication cadence.
+- Publish this design document to `README.md`.
+- Create GitHub milestones (`Milestone 1`, `Milestone 2`, `Milestone 3`) and related issues.
+- Create GitHub project board columns (`Backlog`, `To Do`, `In Progress`, `Review`, `Done`).
+- Define initial package/module structure (`ui`, `service`, `dao`, `model`, `test`).
+
+**Ownership**
+- Scrum Master/Product Owner: backlog setup, sprint planning, milestone tracking.
+- DevOps/GitHub Admin: repository permissions, branch strategy, pull request template.
+- UI + Backend members: draft interfaces and identify integration points.
+
+---
+
+### Milestone 1: Define Service Endpoints, Basic UI, Unit Tests (Week 3-6)
+**Goal:** deliver a working vertical slice with interface-first design and BDD unit tests.
+
+**Scope**
+- Define interfaces for core services and persistence:
+  - `EventService`, `AuthService`, `RSVPService`
+  - `EventRepository`, `UserRepository`
+- Implement stub/mock classes for each interface to enable parallel development.
+- Build basic UI screens:
+  - Login/Signup
+  - Event Feed
+  - Event Details with RSVP action
+- Implement initial JSON event payload handling.
+- Write unit tests for non-UI classes using Given/When/Then format aligned to Section 3 scenarios.
+
+**Definition of Done**
+- Students can log in and view events from stubbed or in-memory data.
+- Students can RSVP and see RSVP status in "My Events" (basic view acceptable).
+- Interface-based tests pass in CI/local build.
+- Weekly significant commits and pushes are visible in repository history.
+
+---
+
+### Milestone 2: Persistence and Interface Implementations (Week 7-10)
+**Goal:** replace stubs with real implementations and integrate required enterprise features.
+
+**Scope**
+- Implement persistence layer behind interfaces using one of:
+  - Hibernate/JPA with relational database, or
+  - equivalent persistent storage approved by instructor.
+- Integrate code review recommendations from Milestone 1.
+- Complete organizer flow:
+  - Create Event form validation
+  - Persisted event publishing to feed
+- Improve reminder/notification preference handling in Settings.
+- Ensure JSON production/consumption for event APIs.
+
+**Definition of Done**
+- CRUD operations for events are persisted and retrievable across sessions.
+- Organizer-created events appear in public feed from persistent store.
+- Unit/integration tests cover service + dao paths.
+- Milestone 1 review feedback is addressed and documented.
+
+---
+
+### Milestone 3: Integration and Final Product Readiness (Week 11-14)
+**Goal:** integrate external systems, polish usability, and prepare final presentation.
+
+**Scope**
+- Apply Milestone 2 code review feedback.
+- Integrate at least one external system:
+  - Calendar integration (Google/Outlook ICS export or API), and/or
+  - Third-party authentication (OAuth), and/or
+  - Cloud storage/service integration.
+- Finalize reminders and calendar sync behavior.
+- Improve UI/UX polish, accessibility, and responsiveness.
+- Prepare and publish final presentation video (Kaltura or YouTube).
+
+**Definition of Done**
+- Application demonstrates full flow: discover -> view -> RSVP -> reminder/calendar outcome.
+- JSON integration works end-to-end with external/internal APIs.
+- Team can demo a marketable, easy-to-use product in final presentation.
+- Source is readable, consistently structured, and sufficiently commented.
+
+---
+
+### Sprint Cadence and Commit Policy
+- Cadence: 6 two-week sprints (or equivalent) across milestones.
+- Each member pushes meaningful code weekly.
+- Pull requests require review before merge when possible.
+- Scrum Master verifies milestone completion checklists before deadlines.
  
 ## 9. Weekly Meeting
 - Time: Thursday from 10AM-10:30AM
