@@ -22,6 +22,7 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(auth -> auth
                                                 // Public routes
                                                 .requestMatchers("/", "/events", "/events/{id}").permitAll()
+                                                .requestMatchers("/api/events/**").permitAll()
                                                 .requestMatchers("/auth/login", "/auth/register").permitAll()
                                                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                                                 .requestMatchers("/actuator/health").permitAll()

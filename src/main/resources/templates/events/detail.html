@@ -78,6 +78,12 @@
                 <span th:each="tag : ${event.tags}" class="tag" th:text="${tag}">tag</span>
             </div>
 
+            <div class="event-actions">
+                <a th:href="@{/api/events/{id}/calendar.ics(id=${event.id})}" class="btn btn-outline">
+                    Add to Calendar (.ics)
+                </a>
+            </div>
+
             <!-- RSVP section — only for authenticated users with PUBLISHED events -->
             <div class="event-actions" sec:authorize="isAuthenticated()" th:if="${event.status.name() == 'PUBLISHED'}">
                 <div th:if="${!hasRsvp}">
