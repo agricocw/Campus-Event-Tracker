@@ -39,4 +39,12 @@ public class CreateEventForm {
 
     @Size(max = 200, message = "Tags must be at most 200 characters")
     private String tags; // comma-separated
+
+    @AssertTrue(message = "End time must be after start time")
+    public boolean isEndTimeAfterStartTime() {
+        if (startTime == null || endTime == null) {
+            return true; // null checks handled by other validators
+        }
+        return endTime.isAfter(startTime);
+    }
 }
